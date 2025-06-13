@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary to Decimal Converter - Convert Binary to Decimal Online</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+    <header>
+        <h1>Binary to Decimal Converter</h1>
+        <p>Instantly convert binary numbers to their decimal equivalent.</p>
+    </header>
+
+    <main>
+        <section class="converter-section">
+            <h2>Convert Now!</h2>
+            <div class="converter-box">
+                <label for="binaryInput">Enter Binary Number:</label>
+                <input type="text" id="binaryInput" placeholder="e.g., 10110">
+                <button id="convertBtn">Convert</button>
+                <div id="error-msg" class="error-message"></div>
+                <label for="decimalOutput">Decimal Result:</label>
+                <input type="text" id="decimalOutput" readonly>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <h2>How it Works</h2>
+            <p>Our tool simplifies the process of binary to decimal conversion by multiplying each binary digit by the power of 2 corresponding to its position and summing the values.</p>
+            <p>For example, to convert 1010, the tool calculates: (1 * 2^3) + (0 * 2^2) + (1 * 2^1) + (0 * 2^0) = 8 + 0 + 2 + 0 = 10.</p>
+        </section>
+
+        <section class="benefits">
+            <h2>Why Use Our Converter?</h2>
+            <ul>
+                <li><strong>Fast and Easy:</strong> Get instant results with a user-friendly interface.</li>
+                <li><strong>Accurate Conversions:</strong> Ensures correct and reliable conversions.</li>
+                <li><strong>Free Online Tool:</strong> Access it anytime, anywhere.</li>
+                <li><strong>Simplifies Complex Conversions:</strong> Ideal for students and professionals.</li>
+            </ul>
+        </section>
+
+        <!-- Optional: Add a section with FAQs or examples if desired -->
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Your Website Name. All rights reserved.</p>
+        <!-- Add links to privacy policy, terms of service, etc. -->
+    </footer>
+
+    <script src="script.js"></script> <!-- Link to your Javascript file -->
+
+</body>
+</html>
