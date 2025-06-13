@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary to Decimal Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .result-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .steps-container {
+            margin-top: 20px;
+        }
+
+        .step-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 5px;
+        }
+
+        .step-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .position-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            min-width: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .position-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .position-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .position-power {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .position-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .calculation-steps {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .calc-step {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+        }
+
+        .final-sum {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Quiz Styles */
+        .quiz-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-section h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 2em;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #28a745;
+        }
+
+        .score, .streak {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .score span, .streak span {
+            color: #28a745;
+            font-size: 1.2em;
+        }
+
+        .question-container {
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .binary-display {
+            font-size: 3em;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 25px 0;
+            padding: 20px;
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .answer-btn {
+            padding: 15px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .answer-btn.correct {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        .answer-btn.incorrect {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: white;
+            animation: shake 0.6s ease-in-out;
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .feedback {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+        }
+
+        .feedback.incorrect {
+            background: linear-gradient(135deg, #f8d7da, #f1b0b7);
+            border: 2px solid #dc3545;
+        }
+
+        .feedback-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .feedback.correct .feedback-text {
+            color: #155724;
+        }
+
+        .feedback.incorrect .feedback-text {
+            color: #721c24;
+        }
+
+        .explanation {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .quiz-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .hint-btn, .new-game-btn {
+            padding: 12px 25px;
+            border: 2px solid #ffc107;
+            background: white;
+            color: #ffc107;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hint-btn:hover, .new-game-btn:hover {
+            background: #ffc107;
+            color: #333;
+            transform: translateY(-2px);
+        }
+
+        .new-game-btn {
+            border-color: #6c757d;
+            color: #6c757d;
+        }
+
+        .new-game-btn:hover {
+            background: #6c757d;
+            color: white;
+        }
+
+        .hint-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffc107;
+            border-radius: 15px;
+        }
+
+        .hint-content h4 {
+            margin-bottom: 15px;
+            color: #856404;
+        }
+
+        .hint-breakdown {
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .position-box {
+                min-width: 60px;
+                padding: 8px;
+            }
+            
+            .position-number {
+                font-size: 1.2em;
+            }
+
+            .binary-display {
+                font-size: 2em;
+                padding: 15px;
+            }
+
+            .answer-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quiz-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Binary to Decimal Converter</h1>
+        
+        <div class="input-section">
+            <label for="binaryInput">Enter Binary Number:</label>
+            <input type="text" id="binaryInput" placeholder="e.g., 1101, 10110, 11111" maxlength="20">
+            <div class="error" id="errorMessage">Please enter a valid binary number (only 0s and 1s)</div>
+        </div>
+
+        <div class="result-section hidden" id="resultSection">
+            <div class="result-value" id="decimalResult"></div>
+            
+            <div class="steps-container">
+                <div class="step-title">Step 1: Position Values (Powers of 2)</div>
+                <div class="step-visual" id="positionBoxes"></div>
+                
+                <div class="step-title">Step 2: Calculate Each Position</div>
+                <div class="calculation-steps" id="calculationSteps"></div>
+            </div>
+        </div>
+
+        <div class="quiz-section" id="quizSection">
+            <h2>🎯 Interactive Challenge</h2>
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <div class="score">Score: <span id="score">0</span></div>
+                    <div class="streak">Streak: <span id="streak">0</span></div>
+                </div>
+                
+                <div class="quiz-content" id="quizContent">
+                    <div class="question-container">
+                        <p class="question-text" id="questionText">What is the decimal value of this binary number?</p>
+                        <div class="binary-display" id="binaryQuestion">1010</div>
+                        
+                        <div class="answer-options" id="answerOptions">
+                            <!-- Answer buttons will be generated here -->
+                        </div>
+                        
+                        <div class="feedback hidden" id="feedback">
+                            <div class="feedback-text" id="feedbackText"></div>
+                            <div class="explanation" id="explanation"></div>
+                            <button class="next-btn" id="nextBtn">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-controls">
+                    <button class="hint-btn" id="hintBtn">💡 Show Hint</button>
+                    <button class="new-game-btn" id="newGameBtn">🔄 New Game</button>
+                </div>
+
+                <div class="hint-panel hidden" id="hintPanel">
+                    <div class="hint-content">
+                        <h4>💡 Hint:</h4>
+                        <div class="hint-breakdown" id="hintBreakdown"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const binaryInput = document.getElementById('binaryInput');
+        const errorMessage = document.getElementById('errorMessage');
+        const resultSection = document.getElementById('resultSection');
+        const decimalResult = document.getElementById('decimalResult');
+        const positionBoxes = document.getElementById('positionBoxes');
+        const calculationSteps = document.getElementById('calculationSteps');
+
+        function isValidBinary(str) {
+            return /^[01]+$/.test(str) && str.length > 0;
+        }
+
+        function convertBinaryToDecimal(binary) {
+            let decimal = 0;
+            const steps = [];
+            const positions = [];
+            
+            // Process from right to left (least significant to most significant)
+            for (let i = 0; i < binary.length; i++) {
+                const position = binary.length - 1 - i;
+                const bit = parseInt(binary[i]);
+                const power = position;
+                const value = bit * Math.pow(2, power);
+                
+                positions.push({
+                    bit: bit,
+                    position: position,
+                    power: power,
+                    value: value
+                });
+                
+                if (bit === 1) {
+                    steps.push(`${bit} × 2^${power} = ${bit} × ${Math.pow(2, power)} = ${value}`);
+                    decimal += value;
+                } else {
+                    steps.push(`${bit} × 2^${power} = ${bit} × ${Math.pow(2, power)} = ${value}`);
+                }
+            }
+            
+            return { decimal, steps, positions };
+        }
+
+        function displayResult(binary) {
+            const result = convertBinaryToDecimal(binary);
+            
+            // Show decimal result
+            decimalResult.textContent = `${binary}₂ = ${result.decimal}₁₀`;
+            
+            // Clear previous content
+            positionBoxes.innerHTML = '';
+            calculationSteps.innerHTML = '';
+            
+            // Create position boxes
+            result.positions.forEach(pos => {
+                const box = document.createElement('div');
+                box.className = 'position-box';
+                box.innerHTML = `
+                    <div class="position-number">${pos.bit}</div>
+                    <div class="position-power">2^${pos.power}</div>
+                    <div class="position-value">${Math.pow(2, pos.power)}</div>
+                `;
+                positionBoxes.appendChild(box);
+            });
+            
+            // Add calculation steps
+            result.steps.forEach(step => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'calc-step';
+                stepDiv.textContent = step;
+                calculationSteps.appendChild(stepDiv);
+            });
+            
+            // Add final sum
+            const finalSum = document.createElement('div');
+            finalSum.className = 'final-sum';
+            const nonZeroValues = result.positions.filter(pos => pos.value > 0).map(pos => pos.value);
+            if (nonZeroValues.length > 1) {
+                finalSum.textContent = `Final Sum: ${nonZeroValues.join(' + ')} = ${result.decimal}`;
+            } else {
+                finalSum.textContent = `Result: ${result.decimal}`;
+            }
+            calculationSteps.appendChild(finalSum);
+            
+            // Show result section
+            resultSection.classList.remove('hidden');
+        }
+
+        function handleInput() {
+            const input = binaryInput.value.trim();
+            
+            if (input === '') {
+                resultSection.classList.add('hidden');
+                errorMessage.style.display = 'none';
+                return;
+            }
+            
+            if (!isValidBinary(input)) {
+                errorMessage.style.display = 'block';
+                resultSection.classList.add('hidden');
+                return;
+            }
+            
+            errorMessage.style.display = 'none';
+            displayResult(input);
+        }
+
+        // Add event listeners
+        binaryInput.addEventListener('input', handleInput);
+        binaryInput.addEventListener('keyup', handleInput);
+
+        // Add some example on page load
+        binaryInput.value = '1101';
+        handleInput();
+
+        // Quiz Game Logic
+        class BinaryQuiz {
+            constructor() {
+                this.score = 0;
+                this.streak = 0;
+                this.currentQuestion = null;
+                this.usedQuestions = new Set();
+                
+                this.scoreElement = document.getElementById('score');
+                this.streakElement = document.getElementById('streak');
+                this.binaryQuestionElement = document.getElementById('binaryQuestion');
+                this.answerOptionsElement = document.getElementById('answerOptions');
+                this.feedbackElement = document.getElementById('feedback');
+                this.feedbackTextElement = document.getElementById('feedbackText');
+                this.explanationElement = document.getElementById('explanation');
+                this.nextBtnElement = document.getElementById('nextBtn');
+                this.hintBtnElement = document.getElementById('hintBtn');
+                this.hintPanelElement = document.getElementById('hintPanel');
+                this.hintBreakdownElement = document.getElementById('hintBreakdown');
+                this.newGameBtnElement = document.getElementById('newGameBtn');
+                
+                this.setupEventListeners();
+                this.generateNewQuestion();
+            }
+            
+            setupEventListeners() {
+                this.nextBtnElement.addEventListener('click', () => this.generateNewQuestion());
+                this.hintBtnElement.addEventListener('click', () => this.showHint());
+                this.newGameBtnElement.addEventListener('click', () => this.resetGame());
+            }
+            
+            generateBinaryNumber() {
+                // Generate binary numbers of varying difficulty
+                const difficulty = Math.min(Math.floor(this.score / 3) + 3, 8); // 3-8 bits
+                let binary = '';
+                
+                // Ensure at least one '1' bit
+                let hasOne = false;
+                for (let i = 0; i < difficulty; i++) {
+                    const bit = Math.random() < 0.6 ? '1' : '0';
+                    if (bit === '1') hasOne = true;
+                    binary += bit;
+                }
+                
+                // If no '1' bits, add one randomly
+                if (!hasOne) {
+                    const randomPos = Math.floor(Math.random() * difficulty);
+                    binary = binary.substring(0, randomPos) + '1' + binary.substring(randomPos + 1);
+                }
+                
+                return binary;
+            }
+            
+            generateNewQuestion() {
+                let binary;
+                let decimal;
+                
+                // Avoid repeating questions
+                do {
+                    binary = this.generateBinaryNumber();
+                    decimal = parseInt(binary, 2);
+                } while (this.usedQuestions.has(binary) && this.usedQuestions.size < 50);
+                
+                this.usedQuestions.add(binary);
+                this.currentQuestion = { binary, decimal };
+                
+                // Display question
+                this.binaryQuestionElement.textContent = binary;
+                
+                // Generate answer options
+                this.generateAnswerOptions(decimal);
+                
+                // Reset UI
+                this.feedbackElement.classList.add('hidden');
+                this.hintPanelElement.classList.add('hidden');
+                this.hintBtnElement.style.display = 'inline-block';
+            }
+            
+            generateAnswerOptions(correctAnswer) {
+                const options = new Set([correctAnswer]);
+                
+                // Generate wrong answers
+                while (options.size < 4) {
+                    let wrongAnswer;
+                    const rand = Math.random();
+                    
+                    if (rand < 0.3) {
+                        // Off by powers of 2
+                        wrongAnswer = correctAnswer + Math.pow(2, Math.floor(Math.random() * 4));
+                    } else if (rand < 0.6) {
+                        // Close numbers
+                        wrongAnswer = correctAnswer + (Math.random() < 0.5 ? -1 : 1) * (Math.floor(Math.random() * 3) + 1);
+                    } else {
+                        // Random in reasonable range
+                        const range = Math.max(correctAnswer, 10);
+                        wrongAnswer = Math.floor(Math.random() * range * 2);
+                    }
+                    
+                    if (wrongAnswer >= 0 && wrongAnswer !== correctAnswer) {
+                        options.add(wrongAnswer);
+                    }
+                }
+                
+                // Convert to array and shuffle
+                const optionsArray = Array.from(options);
+                for (let i = optionsArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [optionsArray[i], optionsArray[j]] = [optionsArray[j], optionsArray[i]];
+                }
+                
+                // Create buttons
+                this.answerOptionsElement.innerHTML = '';
+                optionsArray.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'answer-btn';
+                    button.textContent = option;
+                    button.addEventListener('click', () => this.checkAnswer(option, button));
+                    this.answerOptionsElement.appendChild(button);
+                });
+            }
+            
+            checkAnswer(selectedAnswer, buttonElement) {
+                const isCorrect = selectedAnswer === this.currentQuestion.decimal;
+                
+                // Disable all buttons
+                const allButtons = this.answerOptionsElement.querySelectorAll('.answer-btn');
+                allButtons.forEach(btn => btn.disabled = true);
+                
+                // Style the selected button
+                buttonElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+                
+                // Highlight correct answer if wrong was selected
+                if (!isCorrect) {
+                    allButtons.forEach(btn => {
+                        if (parseInt(btn.textContent) === this.currentQuestion.decimal) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                
+                // Update score and streak
+                if (isCorrect) {
+                    this.score++;
+                    this.streak++;
+                } else {
+                    this.streak = 0;
+                }
+                
+                this.updateDisplay();
+                this.showFeedback(isCorrect);
+                this.hintBtnElement.style.display = 'none';
+            }
+            
+            showFeedback(isCorrect) {
+                this.feedbackElement.classList.remove('hidden');
+                this.feedbackElement.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                if (isCorrect) {
+                    const messages = [
+                        '🎉 Excellent!', '✨ Perfect!', '🔥 Great job!', '⭐ Outstanding!', 
+                        '🎯 Bull\'s eye!', '💯 Amazing!'
+                    ];
+                    this.feedbackTextElement.textContent = messages[Math.floor(Math.random() * messages.length)];
+                } else {
+                    const messages = [
+                        '❌ Not quite right', '🤔 Try again next time', '📚 Keep learning!', 
+                        '💪 You\'ll get it next time!'
+                    ];
+                    this.feedbackTextElement.textContent = messages[Math.floor(Math.random() * messages.length)];
+                }
+                
+                // Show explanation
+                this.showExplanation();
+            }
+            
+            showExplanation() {
+                const binary = this.currentQuestion.binary;
+                const result = convertBinaryToDecimal(binary);
+                
+                let explanation = `${binary}₂ = `;
+                const nonZeroSteps = result.steps.filter(step => !step.includes(' = 0'));
+                explanation += nonZeroSteps.join(' + ').replace(/=/g, '→');
+                explanation += ` = ${result.decimal}₁₀`;
+                
+                this.explanationElement.textContent = explanation;
+            }
+            
+            showHint() {
+                const binary = this.currentQuestion.binary;
+                const result = convertBinaryToDecimal(binary);
+                
+                let hint = 'Position breakdown:\n';
+                result.positions.forEach(pos => {
+                    hint += `${pos.bit} × 2^${pos.power} = ${pos.bit} × ${Math.pow(2, pos.power)} = ${pos.value}\n`;
+                });
+                
+                const nonZeroValues = result.positions.filter(pos => pos.value > 0).map(pos => pos.value);
+                if (nonZeroValues.length > 1) {
+                    hint += `\nAdd non-zero values: ${nonZeroValues.join(' + ')} = ?`;
+                }
+                
+                this.hintBreakdownElement.textContent = hint;
+                this.hintPanelElement.classList.remove('hidden');
+            }
+            
+            updateDisplay() {
+                this.scoreElement.textContent = this.score;
+                this.streakElement.textContent = this.streak;
+            }
+            
+            resetGame() {
+                this.score = 0;
+                this.streak = 0;
+                this.usedQuestions.clear();
+                this.updateDisplay();
+                this.generateNewQuestion();
+            }
+        }
+        
+        // Initialize quiz
+        const quiz = new BinaryQuiz();
+    </script>
+</body>
+</html>
